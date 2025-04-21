@@ -465,6 +465,8 @@ dependencies = [
  "askama",
  "axum",
  "mime",
+ "serde",
+ "serde_json",
  "tokio",
  "tower-http",
 ]
