@@ -1,14 +1,16 @@
+use std::path::Path;
+use serde::Deserialize;
 
+#[derive(Deserialize)]
 pub struct Recipe {
-    pub title: &'static str,
-    pub ingredients : &'static str,
-    pub instructions: &'static str,
-    pub source: &'static str,
+    pub title: String,
+    pub ingredients : Vec<String>,
+    pub instructions: Vec<String>,
+    pub source: String,
 }
 
-pub const THE_RECIPE: Recipe = Recipe {
-    title: "Example Recipe",
-    ingredients: "ING1",
-    instructions: "INST1",
-    source: "http://www.example.com"
-};
+pub fn read_recipes<P: AsRef<Path>>(recipes_path: P) -> Result<Vec<Recipe>, Box<dyn std::error::Error>> {
+    let f = std::fs::File::open(recipes_path.as_ref())?;
+    let recipes = serde_json::from_reader(f)?;
+    Ok(recipes)
+}
