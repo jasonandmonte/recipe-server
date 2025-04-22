@@ -5,17 +5,29 @@ use recipe::*;
 use templates::*;
 
 extern crate mime;
-use axum::{self, response, routing};
-use tokio::net;
+use axum::{self, extract::State, response, routing};
+use tokio::{net, sync::RwLock};
 use tower_http::services;
+use std::sync::Arc;
 
-async fn get_recipe() -> response::Html<String> {
-    // Reference to a constant
-    let joke = IndexTemplate::recipe(&THE_RECIPE);
-    response::Html(joke.to_string())
+struct AppState {
+    recipes: Vec<Recipe>,
+}
+
+async fn get_recipe(State(app_state): State<Arc<RwLock<AppState>>>) -> response::Html<String> {
+    let app_state = app_state.read().await;
+    // TODO: Take a random recipe from array
+    // let nrecipes = app_state.recipes.len();
+    let recipe = &app_state.recipes[0];
+    let recipe = IndexTemplate::recipe(recipe);
+    response::Html(recipe.to_string())
 }
 
 async fn serve() -> Result<(), Box<dyn std::error::Error>> {
+    let recipes = read_recipes("assets/static/recipes.json")?;
+    let state = Arc::new(RwLock::new(AppState{recipes}));
+
+
     let mime_favicon = "image/vnd.microsoft.icon".parse().unwrap();
     let app = axum::Router::new()
         .route("/", routing::get(get_recipe))
@@ -33,7 +45,8 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
                 "assets/static/favicon.ico",
                 &mime_favicon,
             ),
-        );
+        )
+        .with_state(state);
     let listener = net::TcpListener::bind("127.0.0.1:3000").await?;
     axum::serve(listener, app).await?;
     Ok(())
