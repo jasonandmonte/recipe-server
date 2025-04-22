@@ -8,10 +8,20 @@
 <body>
     <h1>Recipes</h1>
     <div class="recipe">
-        <span class="">{{recipe.title}}</span><br/>
-        <span class="">{{recipe.ingredients}}</span><br/>
-        <span class="">{{recipe.instructions}}</span><br/>
-        <span class="">{{recipe.source}}</span><br/>
+        <h2>{{recipe.title}}</h2>
+        <h3>Ingredients</h3>
+        <ul>
+            {% for ingredient in recipe.ingredients %}
+                <li>{{ ingredient }}</li>
+            {% endfor %}
+        </ul>
+        <h3>Instructions</h3>
+        <ol>
+            {% for step in recipe.instructions %}
+                <li>{{ step }}</li>
+            {% endfor %}
+        </ol>
+        <span class="">Recipe source: <a href="{{recipe.source}}">{{recipe.source}}</a></span><br/>
     </div>
 </body>
 </html>
