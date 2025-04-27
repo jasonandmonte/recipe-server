@@ -6,7 +6,9 @@ use error::*;
 use recipe::*;
 use templates::*;
 
+extern crate fastrand;
 extern crate mime;
+
 use axum::{self, extract::State, response, routing};
 use std::sync::Arc;
 use tokio::{net, sync::RwLock};
@@ -19,9 +21,9 @@ struct AppState {
 
 async fn get_recipe(State(app_state): State<Arc<RwLock<AppState>>>) -> response::Html<String> {
     let app_state = app_state.read().await;
-    // TODO: Take a random recipe from array
-    // let nrecipes = app_state.recipes.len();
-    let recipe = &app_state.recipes[0];
+    let total_recipes = app_state.recipes.len();
+    let i = fastrand::usize(0..total_recipes);
+    let recipe = &app_state.recipes[i];
     let recipe = IndexTemplate::recipe(recipe);
     response::Html(recipe.to_string())
 }
