@@ -5,7 +5,30 @@ Author: Jason Gonzales
 
 This project implements a web server that serves randomly selected recipes. Currently on startup recipes are read from a JSON file (`assets/static/recipes.json`) into memory. When a user accesses the home page or refreshes a random recipe is displayed.
 
-## Setup
+## Setup & Development
+
+```sh
+cargo install sqlx-cli
+mkdir db && sqlx database create --database-url sqlite://db/recipes.db
+```
+
+Make `.env` file with database path `DATABASE_URL=sqlite://db/recipes.db`
+
+Create migrations:
+```sh
+sqlx migrate add -r -s <name>
+```
+
+Apply migration:
+```sh
+sqlx migrate run --database-url sqlite://db/recipes.db
+```
+
+First run to add recipes from `.json` file:
+```sh
+cargo run -- --init-from assets/static/recipes.json
+```
+
 
 `cargo run --release`: This will run the server on http://127.0.0.1:3000
 
