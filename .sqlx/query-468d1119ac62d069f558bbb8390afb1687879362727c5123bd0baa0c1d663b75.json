@@ -1,0 +1,44 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT * FROM recipes ORDER BY RANDOM() LIMIT 1;",
+  "describe": {
+    "columns": [
+      {
+        "name": "id",
+        "ordinal": 0,
+        "type_info": "Text"
+      },
+      {
+        "name": "title",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "ingredients",
+        "ordinal": 2,
+        "type_info": "Text"
+      },
+      {
+        "name": "instructions",
+        "ordinal": 3,
+        "type_info": "Text"
+      },
+      {
+        "name": "recipe_source",
+        "ordinal": 4,
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "468d1119ac62d069f558bbb8390afb1687879362727c5123bd0baa0c1d663b75"
+}
