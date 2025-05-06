@@ -12,7 +12,6 @@ pub struct JSONRecipe {
     pub tags: HashSet<String>,
 }
 
-
 pub struct Recipe {
     pub id: String,
     pub title: String,
@@ -28,7 +27,7 @@ pub fn read_recipes<P: AsRef<Path>>(recipes_path: P) -> Result<Vec<JSONRecipe>, 
 }
 
 impl JSONRecipe {
-    pub fn to_recipe(&self) -> (Recipe, impl Iterator<Item=&str>) {
+    pub fn to_recipe(&self) -> (Recipe, impl Iterator<Item = &str>) {
         let recipe = Recipe {
             id: self.id.clone(),
             title: self.title.clone(),

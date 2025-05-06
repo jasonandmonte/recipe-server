@@ -11,17 +11,17 @@ extern crate mime;
 
 use axum::{self, extract::State, response, routing};
 use clap::Parser;
-use std::sync::Arc;
 use sqlx::SqlitePool;
+use std::sync::Arc;
 use tokio::{net, sync::RwLock};
 use tower_http::{services, trace};
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
 #[derive(Parser)]
- struct Args {
-     #[arg(short, long, name = "init-from")]
-     init_from: Option<std::path::PathBuf>,
- }
+struct Args {
+    #[arg(short, long, name = "init-from")]
+    init_from: Option<std::path::PathBuf>,
+}
 
 struct AppState {
     db: SqlitePool,
@@ -69,9 +69,9 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
     let state = Arc::new(RwLock::new(AppState { db }));
 
     // RUST_LOG is the default env variable
-    let filter =
-        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("recipe_server=debug,info"));
-    
+    let filter = EnvFilter::try_from_default_env()
+        .unwrap_or_else(|_| EnvFilter::new("recipe_server=debug,info"));
+
     tracing_subscriber::registry()
         .with(filter)
         .with(tracing_subscriber::fmt::layer())
@@ -81,7 +81,7 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
         .make_span_with(trace::DefaultMakeSpan::new().level(tracing::Level::INFO))
         .on_response(trace::DefaultOnResponse::new().level(tracing::Level::INFO));
     let mime_favicon = "image/vnd.microsoft.icon".parse().unwrap();
-    
+
     let app = axum::Router::new()
         .route("/", routing::get(get_recipe))
         // NOTE: axum talks to tower-http
