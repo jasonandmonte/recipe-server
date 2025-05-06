@@ -1,116 +1,32 @@
 [{
     "id": "cauliflower-salad",
     "title": "Cauliflower Salad",
-    "ingredients": [
-        "1 head cauliflower, broken into florets",
-        "1 sweet potato, chopped",
-        "1½ cups chickpeas",
-        "1 tbsp extra virgin olive oil",
-        "2 tsp paprika",
-        "1 tsp cumin",
-        "½ tsp garlic powder",
-        "1½ tsp salt",
-        "1 cup quinoa, cooked",
-        "3 cups spinach",
-        "1 avocado, peeled, pitted and chopped",
-        "1 cup cucumber, sliced",
-        "½ cup pickled red onions",
-        "3 tbsp fresh dill",
-        "1 cup extra firm tofu",
-        "1 handful parsley",
-        "1 handful fresh dill",
-        "1 tbsp nutritional yeast",
-        "1 tsp salt",
-        "1 lemon, juiced",
-        "1 clove garlic",
-        "¼ cup water, or more as needed"
-    ],
-    "instructions": [
-        "Preheat the oven to 400F and line a baking sheet with parchment. If you don't already have quinoa prepared, cook it according to package directions at this time. 1/3 a cup of dry quinoa will typically lend 1 cup cooked.", 
-        "Place the chickpeas, onion, cauliflower and sweet potato on the sheet pan, and drizzle with oil, and then the spices. You can do this in a bowl for easier preparation, if desired. Roast for 35 minutes, until the sweet potato and cauliflower are slightly soft.",
-        "While the vegetables roast, prepare your high protein dressing. In a blender, combine the tofu, parsley, dill, nutritional yeast, salt, lemon, garlic and water. Combine until smooth, adding more water as needed to reach a desired consistency.",
-        "When the vegetables are roasted, place a bed of spinach in a bowl, and disperse the toppings as desired, with fresh avocado and cucumber on top. If desired, add pickled onions and dill. Drizzle on the high protein dressing and enjoy."
-    ],
-    "source": "https://plantyou.com/cauliflower-salad/"
+    "ingredients": "1 head cauliflower, broken into florets\n1 sweet potato, chopped\n1½ cups chickpeas\n1 tbsp extra virgin olive oil\n2 tsp paprika\n1 tsp cumin\n½ tsp garlic powder\n1½ tsp salt\n1 cup quinoa, cooked\n3 cups spinach\n1 avocado, peeled, pitted and chopped\n1 cup cucumber, sliced\n½ cup pickled red onions\n3 tbsp fresh dill\n1 cup extra firm tofu\n1 handful parsley\n1 handful fresh dill\n1 tbsp nutritional yeast\n1 tsp salt\n1 lemon, juiced\n1 clove garlic\n¼ cup water, or more as needed",
+    "instructions": "Preheat the oven to 400F and line a baking sheet with parchment. If you don't already have quinoa prepared, cook it according to package directions at this time. 1/3 a cup of dry quinoa will typically lend 1 cup cooked.\nPlace the chickpeas, onion, cauliflower and sweet potato on the sheet pan, and drizzle with oil, and then the spices. You can do this in a bowl for easier preparation, if desired. Roast for 35 minutes, until the sweet potato and cauliflower are slightly soft.\nWhile the vegetables roast, prepare your high protein dressing. In a blender, combine the tofu, parsley, dill, nutritional yeast, salt, lemon, garlic and water. Combine until smooth, adding more water as needed to reach a desired consistency.\nWhen the vegetables are roasted, place a bed of spinach in a bowl, and disperse the toppings as desired, with fresh avocado and cucumber on top. If desired, add pickled onions and dill. Drizzle on the high protein dressing and enjoy.",
+    "source": "https://plantyou.com/cauliflower-salad/",
+    "tags": ["salad", "vegetarian"]
 },
 {
     "id": "spiced-lentils-with-carrots",
     "title": "Spiced Lentils with Carrots",
-    "ingredients": [
-        "1 yellow onion",
-        "4 cloves garlic",
-        "1 tsp fresh grated ginger",
-        "4 carrots (about 2 cups chopped)",
-        "2 Tbsp olive oil",
-        "1 tsp ground cumin",
-        "1/2 tsp cinnamon",
-        "1/2 tsp allspice",
-        "1/4 tsp crushed red pepper",
-        "1 cup brown lentils",
-        "3 Tbsp tomato paste",
-        "1/4 cup chopped dried apricots",
-        "3 cups vegetable broth",
-        "1 Tbsp chopped parsley"
-    ],
-    "instructions": [
-        "Dice the onion, mince the garlic, grate the ginger, and peel and dice the carrots.",
-        "Add the onion, garlic, ginger, and olive oil to a deep skillet. Sauté over medium heat until the onions are soft and translucent (about five minutes).",
-        "Add the diced carrots, cumin, cinnamon, allspice, and crushed red pepper to the skillet. Continue to sauté for about two minutes more.",
-        "Next, add the uncooked lentils, tomato paste, raisins or chopped apricots, and broth to the skillet. Stir until the tomato paste has dissolved into the broth. Place a lid on the skillet and turn the heat up to high.",
-        "Allow the broth to come to a full boil. Once boiling, turn the heat down to medium-low and let the lentils simmer in the broth with the lid on for 30 minutes, stirring only occasionally.",
-        "After 30 minutes the lentils and carrots should be very tender. Give the lentils a taste and add salt or pepper if needed (this will depend on the salt content of your broth, I did not add any).",
-        "Serve the spiced lentils with crusty bread for dipping, or over a bed of polenta or mashed potatoes. Top with chopped fresh parsley if desired."
-    ],
-    "source": "https://www.budgetbytes.com/spiced-lentils-with-carrots/"
+    "ingredients": "1 yellow onion\n4 cloves garlic\n1 tsp fresh grated ginger\n4 carrots (about 2 cups chopped)\n2 Tbsp olive oil\n1 tsp ground cumin\n1/2 tsp cinnamon\n1/2 tsp allspice\n1/4 tsp crushed red pepper\n1 cup brown lentils\n3 Tbsp tomato paste\n1/4 cup chopped dried apricots\n3 cups vegetable broth\n1 Tbsp chopped parsley",
+    "instructions": "Dice the onion, mince the garlic, grate the ginger, and peel and dice the carrots.\nAdd the onion, garlic, ginger, and olive oil to a deep skillet. Sauté over medium heat until the onions are soft and translucent (about five minutes).\nAdd the diced carrots, cumin, cinnamon, allspice, and crushed red pepper to the skillet. Continue to sauté for about two minutes more.\nNext, add the uncooked lentils, tomato paste, raisins or chopped apricots, and broth to the skillet. Stir until the tomato paste has dissolved into the broth. Place a lid on the skillet and turn the heat up to high.\nAllow the broth to come to a full boil. Once boiling, turn the heat down to medium-low and let the lentils simmer in the broth with the lid on for 30 minutes, stirring only occasionally.\nAfter 30 minutes the lentils and carrots should be very tender. Give the lentils a taste and add salt or pepper if needed (this will depend on the salt content of your broth, I did not add any).\nServe the spiced lentils with crusty bread for dipping, or over a bed of polenta or mashed potatoes. Top with chopped fresh parsley if desired.",
+    "source": "https://www.budgetbytes.com/spiced-lentils-with-carrots/",
+    "tags": ["vegetarian"]
 },
 {
     "id": "curry-and-rice-recipe",
     "title": "Curry and Rice Recipe",
-    "ingredients": [
-        "1/2 lb beef (cut for stew)",
-        "2 onions (medium)",
-        "2 carrots (small)",
-        "3 potatoes (medium)",
-        "1 Tbsp oil",
-        "3 1/2 cups water",
-        "4 oz Japanese curry mix",
-        "steamed rice",
-        "1 Tbsp ketchup",
-        "1 Tbsp Worcestershire sauce",
-        "1 Tbsp soy sauce"
-
-    ],
-    "instructions": [
-        "Cut meat and vegetables into bite size pieces.",
-        "Heat oil in a pot, add meat and brown in oil. Take the meat out.",
-        "In the same pot, fry onions for 8 minutes. Add carrots and potatoes, then add the cooked meat.",
-        "Add water to the pot. After it boils, skim any fat, and reduce heat to low. Cover and cook for 45 minutes until the meat becomes tender. If using a pressure cooker, cook for 15 minutes.",
-        "Remove from heat and add curry sauce mix. Stir well so the pieces of the mix dissolve.",
-        "If you'd like to use the optional seasonings above, now add the ketchup, Worcestershire sauce, and soy sauce. Let simmer for 10-15 minutes (cook longer if you'd like it thicker).",
-        "Pour the curry over rice."
-    ],
-    "source": "https://www.japanesecooking101.com/curry-and-rice-recipe/"
+    "ingredients": "1/2 lb beef (cut for stew)\n2 onions (medium)\n2 carrots (small)\n3 potatoes (medium)\n1 Tbsp oil\n3 1/2 cups water\n4 oz Japanese curry mix\nsteamed rice\n1 Tbsp ketchup\n1 Tbsp Worcestershire sauce\n1 Tbsp soy sauce",
+    "instructions": "Cut meat and vegetables into bite size pieces.\nHeat oil in a pot, add meat and brown in oil. Take the meat out.\nIn the same pot, fry onions for 8 minutes. Add carrots and potatoes, then add the cooked meat.\nAdd water to the pot. After it boils, skim any fat, and reduce heat to low. Cover and cook for 45 minutes until the meat becomes tender. If using a pressure cooker, cook for 15 minutes.\nRemove from heat and add curry sauce mix. Stir well so the pieces of the mix dissolve.\nIf you'd like to use the optional seasonings above, now add the ketchup, Worcestershire sauce, and soy sauce. Let simmer for 10-15 minutes (cook longer if you'd like it thicker).\nPour the curry over rice.",
+    "source": "https://www.japanesecooking101.com/curry-and-rice-recipe/",
+    "tags": ["beef"]
 },
 {
     "id": "herby-italian-orzo-salad",
     "title": "Herby Olive Italian Orzo Salad",
-    "ingredients": [
-        "10 ounces orzo",
-        "1 1/2 cups halved cherry tomatoes",
-        "2 persian cucumbers, sliced and quartered",
-        "1 red bell pepper, diced",
-        "1/2 cup pitted chopped or sliced kalamata olives",
-        "1/2 cup pitted chopped or sliced green olives",
-        "1/3 cup sliced pepperoncini",
-        "1/4 cup thinly sliced red onion",
-        "1/2 cup feta crumbles",
-        "1/3 cup chopped fresh basil",
-        "1/4 cup chopped fresh parsley"
-    ],
-    "instructions": [
-        "Cook your pasta until al dente according to the directions on the package. Once done cooking, drain and add to a large bowl.",
-        "Add the tomatoes, cucumber, bell pepper, kalamata olives, green olives, pepperoncinis, red onion, feta, basil and parsley to the bowl with the pasta. Pour dressing over the top and toss together until combined.",
-        "Serve and enjoy!"
-    ],
-    "source": "https://www.ambitiouskitchen.com/herby-italian-orzo-salad/"
+    "ingredients": "10 ounces orzo\n1 1/2 cups halved cherry tomatoes\n2 persian cucumbers, sliced and quartered\n1 red bell pepper, diced\n1/2 cup pitted chopped or sliced kalamata olives\n1/2 cup pitted chopped or sliced green olives\n1/3 cup sliced pepperoncini\n1/4 cup thinly sliced red onion\n1/2 cup feta crumbles\n1/3 cup chopped fresh basil\n1/4 cup chopped fresh parsley",
+    "instructions": "Cook your pasta until al dente according to the directions on the package. Once done cooking, drain and add to a large bowl.\nAdd the tomatoes, cucumber, bell pepper, kalamata olives, green olives, pepperoncinis, red onion, feta, basil and parsley to the bowl with the pasta. Pour dressing over the top and toss together until combined.\nServe and enjoy!",
+    "source": "https://www.ambitiouskitchen.com/herby-italian-orzo-salad/",
+    "tags": ["salad", "vegetarian"]
 }]

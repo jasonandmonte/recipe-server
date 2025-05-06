@@ -10,27 +10,63 @@ extern crate fastrand;
 extern crate mime;
 
 use axum::{self, extract::State, response, routing};
+use clap::Parser;
 use std::sync::Arc;
+use sqlx::SqlitePool;
 use tokio::{net, sync::RwLock};
 use tower_http::{services, trace};
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
+#[derive(Parser)]
+ struct Args {
+     #[arg(short, long, name = "init-from")]
+     init_from: Option<std::path::PathBuf>,
+ }
+
 struct AppState {
-    recipes: Vec<Recipe>,
+    db: SqlitePool,
 }
 
 async fn get_recipe(State(app_state): State<Arc<RwLock<AppState>>>) -> response::Html<String> {
     let app_state = app_state.read().await;
-    let total_recipes = app_state.recipes.len();
-    let i = fastrand::usize(0..total_recipes);
-    let recipe = &app_state.recipes[i];
+    // let total_recipes = app_state.recipes.len();
+    // let i = fastrand::usize(0..total_recipes);
+    // let recipe = &app_state.recipes[i];
+    let db = &app_state.db;
+    let recipe = sqlx::query_as!(Recipe, "SELECT * FROM recipes ORDER BY RANDOM() LIMIT 1;")
+        .fetch_one(db)
+        .await
+        .unwrap();
+
     let recipe = IndexTemplate::recipe(recipe);
     response::Html(recipe.to_string())
 }
 
 async fn serve() -> Result<(), Box<dyn std::error::Error>> {
-    let recipes = read_recipes("assets/static/recipes.json")?;
-    let state = Arc::new(RwLock::new(AppState { recipes }));
+    let args = Args::parse();
+    let db = SqlitePool::connect("sqlite://db/recipes.db").await?;
+    sqlx::migrate!().run(&db).await?;
+
+    // let recipes = read_recipes("assets/static/recipes.json")?;
+    if let Some(path) = args.init_from {
+        let recipes = read_recipes(path)?;
+        let mut tx = db.begin().await?;
+        for r in &recipes {
+            sqlx::query!(
+                "INSERT INTO recipes (id, title, ingredients, instructions, recipe_source) VALUES ($1, $2, $3, $4, $5);",
+                r.id,
+                r.title,
+                r.ingredients,
+                r.instructions,
+                r.source,
+            )
+            .execute(&mut *tx)
+            .await?;
+        }
+        tx.commit().await?;
+    }
+
+    let state = Arc::new(RwLock::new(AppState { db }));
 
     // RUST_LOG is the default env variable
     let filter =

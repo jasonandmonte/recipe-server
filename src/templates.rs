@@ -4,13 +4,13 @@ use askama::Template;
 
 #[derive(Template)]
 #[template(path = "index.html")] // This directive links rust code/variables to html
-pub struct IndexTemplate<'a> {
-    recipe: &'a Recipe,
+pub struct IndexTemplate {
+    recipe: Recipe,
     stylesheet: &'static str,
 }
 
-impl<'a> IndexTemplate<'a> {
-    pub fn recipe(recipe: &'a Recipe) -> Self {
+impl IndexTemplate {
+    pub fn recipe(recipe: Recipe) -> Self {
         Self {
             recipe,
             stylesheet: "/recipe.css",
