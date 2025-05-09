@@ -12,6 +12,7 @@ pub struct JSONRecipe {
     pub tags: HashSet<String>,
 }
 
+#[derive(Clone)]
 pub struct Recipe {
     pub id: String,
     pub title: String,

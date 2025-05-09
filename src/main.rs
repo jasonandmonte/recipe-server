@@ -25,21 +25,33 @@ struct Args {
 
 struct AppState {
     db: SqlitePool,
+    current_recipe: Recipe,
 }
 
 async fn get_recipe(State(app_state): State<Arc<RwLock<AppState>>>) -> response::Html<String> {
-    let app_state = app_state.read().await;
-    // let total_recipes = app_state.recipes.len();
-    // let i = fastrand::usize(0..total_recipes);
-    // let recipe = &app_state.recipes[i];
+    let mut app_state = app_state.write().await;
     let db = &app_state.db;
-    let recipe = sqlx::query_as!(Recipe, "SELECT * FROM recipes ORDER BY RANDOM() LIMIT 1;")
-        .fetch_one(db)
-        .await
-        .unwrap();
 
-    let recipe = IndexTemplate::recipe(recipe);
-    response::Html(recipe.to_string())
+    let recipe_result = sqlx::query_as!(Recipe, "SELECT * FROM recipes ORDER BY RANDOM() LIMIT 1;")
+        .fetch_one(db)
+        .await;
+    let result = match recipe_result {
+        Ok(recipe) => {
+
+            app_state.current_recipe = recipe.clone();
+            let recipe = IndexTemplate::recipe(recipe.clone());
+            response::Html(recipe.to_string())
+        },
+        Err(_e) => {
+            // FIXME: Currently setting default recipe
+            // Err(http::StatusCode::NOT_FOUND)
+            let recipe = IndexTemplate::recipe(app_state.current_recipe.clone());
+            response::Html(recipe.to_string())
+        }
+    };
+
+    return result;
+
 }
 
 async fn serve() -> Result<(), Box<dyn std::error::Error>> {
@@ -66,7 +78,16 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
         tx.commit().await?;
     }
 
-    let state = Arc::new(RwLock::new(AppState { db }));
+    let current_recipe = Recipe {
+        id: "boil".to_string(),
+        title: "Boil Water".to_string(),
+        ingredients: "100 ml water".to_string(),
+        instructions: "Add water to pot.\nHeat pot until water boils.".to_string(),
+        recipe_source: "Jason Gonzales".to_string(),
+    };
+    let app_state = AppState { db, current_recipe };
+    let state = Arc::new(RwLock::new(app_state));
+
 
     // RUST_LOG is the default env variable
     let filter = EnvFilter::try_from_default_env()
