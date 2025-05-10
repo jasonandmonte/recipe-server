@@ -6,6 +6,7 @@ use error::*;
 use recipe::*;
 use templates::*;
 
+extern crate log;
 extern crate fastrand;
 extern crate mime;
 
@@ -37,14 +38,14 @@ async fn get_recipe(State(app_state): State<Arc<RwLock<AppState>>>) -> response:
         .await;
     let result = match recipe_result {
         Ok(recipe) => {
-
             app_state.current_recipe = recipe.clone();
             let recipe = IndexTemplate::recipe(recipe.clone());
             response::Html(recipe.to_string())
         },
-        Err(_e) => {
-            // FIXME: Currently setting default recipe
+        Err(e) => {
+            log::warn!("recipe failed fetch one query: {}", e);
             // Err(http::StatusCode::NOT_FOUND)
+            // FIXME: Currently setting default recipe
             let recipe = IndexTemplate::recipe(app_state.current_recipe.clone());
             response::Html(recipe.to_string())
         }
@@ -76,6 +77,7 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
             .await?;
         }
         tx.commit().await?;
+        return Ok(());
     }
 
     let current_recipe = Recipe {

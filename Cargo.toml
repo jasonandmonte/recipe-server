@@ -14,6 +14,7 @@ thiserror = "2.0.12"
 tracing = "0.1.41"
 fastrand = "2.3.0"
 clap = { version = "4.5.37", features = ["derive"] }
+log = "0.4.27"
 
 [dependencies.tower-http]
 version = "0.6.2"
