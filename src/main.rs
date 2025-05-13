@@ -6,11 +6,17 @@ use error::*;
 use recipe::*;
 use templates::*;
 
-extern crate log;
 extern crate fastrand;
+extern crate log;
 extern crate mime;
 
-use axum::{self, extract::{Query, State}, http, response::{self, IntoResponse}, routing};
+use axum::{
+    self,
+    extract::{Query, State},
+    http,
+    response::{self, IntoResponse},
+    routing,
+};
 use clap::Parser;
 use serde::Deserialize;
 use sqlx::{Row, SqlitePool};
@@ -39,7 +45,9 @@ struct GetRecipeParams {
 
 async fn tagged_recipe(db: &SqlitePool, tags: &str) -> Result<Option<String>, sqlx::Error> {
     let mut tx = db.begin().await?;
-    sqlx::query("DROP TABLE IF EXISTS qtags;").execute(&mut *tx).await?;
+    sqlx::query("DROP TABLE IF EXISTS qtags;")
+        .execute(&mut *tx)
+        .await?;
     sqlx::query("CREATE TEMPORARY TABLE qtags (tag VARCHR(200));")
         .execute(&mut *tx)
         .await?;
@@ -65,11 +73,11 @@ async fn tagged_recipe(db: &SqlitePool, tags: &str) -> Result<Option<String>, sq
 
 async fn get_recipe(
     State(app_state): State<Arc<RwLock<AppState>>>,
-    Query(params): Query<GetRecipeParams>
-    ) -> Result<response::Response, http::StatusCode> {
+    Query(params): Query<GetRecipeParams>,
+) -> Result<response::Response, http::StatusCode> {
     let mut app_state = app_state.write().await;
     let db = app_state.db.clone();
-    
+
     // User has passed the id in the params
     if let GetRecipeParams { id: Some(id), .. } = params {
         let recipe_result = sqlx::query_as!(Recipe, "SELECT * FROM recipes WHERE id = $1;", id)
@@ -100,11 +108,13 @@ async fn get_recipe(
             }
         };
         return result;
-
     }
 
     // User passed tags in the params
-    if let GetRecipeParams { tags: Some(tags), .. } = params {
+    if let GetRecipeParams {
+        tags: Some(tags), ..
+    } = params
+    {
         log::info!("recipe tags: {}", tags);
 
         let mut tags_string = String::new();
@@ -129,7 +139,6 @@ async fn get_recipe(
                 panic!("tagged recipe selection database error");
             }
         }
-
     }
 
     // Default to a random joke
@@ -141,7 +150,7 @@ async fn get_recipe(
         Ok(id) => {
             let uri = format!("/?id={}", id);
             Ok(response::Redirect::to(&uri).into_response())
-        },
+        }
         Err(e) => {
             log::error!("recipe failed fetch one query: {}", e);
             panic!("recipe selection failed");
@@ -157,8 +166,7 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
     // let recipes = read_recipes("assets/static/recipes.json")?;
     if let Some(path) = args.init_from {
         let recipes = read_recipes(path)?;
-    'next_recipe:
-        for rr in recipes {
+        'next_recipe: for rr in recipes {
             let mut tx = db.begin().await?;
             let (r, tags) = rr.to_recipe();
             let recipe_insert = sqlx::query!(
@@ -204,7 +212,6 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
     };
     let app_state = AppState { db, current_recipe };
     let state = Arc::new(RwLock::new(app_state));
-
 
     // RUST_LOG is the default env variable
     let filter = EnvFilter::try_from_default_env()
