@@ -7,6 +7,11 @@
 </head>
 <body>
     <h1>Recipes</h1>
+    <form>
+        <label>Search By Tags (comma separated):</label>
+        <input type="text" name="tags"/>
+        <button type="submit">New Recipe</button>
+    </form>
     <div class="recipe">
         <h2>{{recipe.title}}</h2>
         <h3>Ingredients</h3>
@@ -21,7 +26,10 @@
                 <li>{{ step }}</li>
             {% endfor %}
         </ol>
+    </div>
+    <div class="info">
         <span class="">Recipe source: <a href="{{recipe.recipe_source}}">{{recipe.recipe_source}}</a></span><br/>
+        <span class="tags">Tags: {{tags}}</span>
     </div>
 </body>
 </html>
