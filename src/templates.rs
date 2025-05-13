@@ -7,13 +7,15 @@ use askama::Template;
 pub struct IndexTemplate {
     recipe: Recipe,
     stylesheet: &'static str,
+    tags: String,
 }
 
 impl IndexTemplate {
-    pub fn recipe(recipe: Recipe) -> Self {
+    pub fn new(recipe: Recipe, tags: String) -> Self {
         Self {
             recipe,
             stylesheet: "/recipe.css",
+            tags,
         }
     }
 }
