@@ -1,3 +1,5 @@
+use crate::*;
+
 use crate::RecipeError;
 use serde::Deserialize;
 use std::{collections::HashSet, ops::Deref, path::Path};
@@ -25,6 +27,19 @@ pub fn read_recipes<P: AsRef<Path>>(recipes_path: P) -> Result<Vec<JSONRecipe>, 
     let f = std::fs::File::open(recipes_path.as_ref())?;
     let recipes = serde_json::from_reader(f)?;
     Ok(recipes)
+}
+
+pub async fn get(db: &SqlitePool, recipe_id: &str) -> Result<(Recipe, Vec<String>), sqlx::Error> {
+    let recipe = sqlx::query_as!(Recipe, "SELECT * FROM recipes WHERE id = $1;", recipe_id)
+        .fetch_one(db)
+        .await?;
+
+    type Tags = Vec<String>;
+    let tags: Tags = sqlx::query_scalar!("SELECT tag FROM tags WHERE recipe_id = $1;", recipe_id)
+        .fetch_all(db)
+        .await?;
+
+    Ok((recipe, tags))
 }
 
 impl JSONRecipe {
