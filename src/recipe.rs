@@ -1,10 +1,10 @@
 use crate::*;
 
 use crate::RecipeError;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::{collections::HashSet, ops::Deref, path::Path};
 
-#[derive(Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct JSONRecipe {
     pub id: String,
     pub title: String,
@@ -43,6 +43,18 @@ pub async fn get(db: &SqlitePool, recipe_id: &str) -> Result<(Recipe, Vec<String
 }
 
 impl JSONRecipe {
+    pub fn new(recipe: Recipe, tags: Vec<String>) -> Self {
+        let tags = tags.into_iter().collect();
+        Self {
+            id: recipe.id,
+            title: recipe.title,
+            ingredients: recipe.ingredients,
+            instructions: recipe.instructions,
+            source: recipe.recipe_source,
+            tags,
+        }
+    }
+
     pub fn to_recipe(&self) -> (Recipe, impl Iterator<Item = &str>) {
         let recipe = Recipe {
             id: self.id.clone(),
@@ -54,5 +66,11 @@ impl JSONRecipe {
 
         let tags = self.tags.iter().map(String::deref);
         (recipe, tags)
+    }
+}
+
+impl axum::response::IntoResponse for &JSONRecipe {
+    fn into_response(self) -> axum::response::Response {
+        (http::StatusCode::OK, axum::Json(&self)).into_response()
     }
 }
