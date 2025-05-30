@@ -106,7 +106,9 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
         .on_response(trace::DefaultOnResponse::new().level(tracing::Level::INFO));
 
     // API Routing
-    let apis = axum::Router::new().route("/recipe/{recipe_id}", routing::get(api::get_recipe));
+    let apis = axum::Router::new()
+        .route("/recipe/{recipe_id}", routing::get(api::get_recipe_by_id))
+        .route("/recipe/random", routing::get(api::get_random_recipe));
 
     let cors = tower_http::cors::CorsLayer::new()
         .allow_methods([http::Method::GET])

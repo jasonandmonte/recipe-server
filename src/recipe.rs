@@ -42,6 +42,15 @@ pub async fn get(db: &SqlitePool, recipe_id: &str) -> Result<(Recipe, Vec<String
     Ok((recipe, tags))
 }
 
+/// Get random ID and then call get() to get recipe & tags
+pub async fn get_random(db: &SqlitePool) -> Result<(Recipe, Vec<String>), sqlx::Error> {
+    let id = sqlx::query_scalar!("SELECT id FROM recipes ORDER BY RANDOM() LIMIT 1;")
+        .fetch_one(db)
+        .await?;
+
+    get(db, &id).await
+}
+
 impl JSONRecipe {
     pub fn new(recipe: Recipe, tags: Vec<String>) -> Self {
         let tags = tags.into_iter().collect();
