@@ -1,10 +1,10 @@
 use crate::*;
 
 use crate::RecipeError;
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::{collections::HashSet, ops::Deref, path::Path};
 
-#[derive(Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct JSONRecipe {
     pub id: String,
     pub title: String,
@@ -42,7 +42,59 @@ pub async fn get(db: &SqlitePool, recipe_id: &str) -> Result<(Recipe, Vec<String
     Ok((recipe, tags))
 }
 
+/// Get random ID and then call get() to get recipe & tags
+pub async fn get_random(db: &SqlitePool) -> Result<(Recipe, Vec<String>), sqlx::Error> {
+    let id = sqlx::query_scalar!("SELECT id FROM recipes ORDER BY RANDOM() LIMIT 1;")
+        .fetch_one(db)
+        .await?;
+
+    get(db, &id).await
+}
+
+/// Get random recipe from given tags
+pub async fn get_random_from_tags(db: &SqlitePool, tags: Vec<String>) -> Result<(Recipe, Vec<String>), sqlx::Error> 
+{
+    let mut tx = db.begin().await?;
+    sqlx::query("DROP TABLE IF EXISTS qtags;")
+        .execute(&mut *tx)
+        .await?;
+    sqlx::query("CREATE TEMPORARY TABLE qtags (tag VARCHR(200));")
+        .execute(&mut *tx)
+        .await?;
+    for tag in tags {
+        sqlx::query("INSERT INTO qtags VALUES ($1);")
+            .bind(tag)
+            .execute(&mut *tx)
+            .await?;
+    }
+
+    let row = sqlx::query("SELECT DISTINCT recipe_id FROM tags JOIN qtags ON tags.tag = qtags.tag ORDER BY RANDOM() LIMIT 1;")
+        .fetch_optional(&mut *tx)
+        .await?;
+
+    tx.commit().await?;
+
+    if let Some(row) = row {
+        let id: String = row.get("recipe_id");
+        get(db, &id).await
+    } else {
+        Err(sqlx::Error::RowNotFound)
+    }
+}
+
 impl JSONRecipe {
+    pub fn new(recipe: Recipe, tags: Vec<String>) -> Self {
+        let tags = tags.into_iter().collect();
+        Self {
+            id: recipe.id,
+            title: recipe.title,
+            ingredients: recipe.ingredients,
+            instructions: recipe.instructions,
+            source: recipe.recipe_source,
+            tags,
+        }
+    }
+
     pub fn to_recipe(&self) -> (Recipe, impl Iterator<Item = &str>) {
         let recipe = Recipe {
             id: self.id.clone(),
@@ -54,5 +106,11 @@ impl JSONRecipe {
 
         let tags = self.tags.iter().map(String::deref);
         (recipe, tags)
+    }
+}
+
+impl axum::response::IntoResponse for &JSONRecipe {
+    fn into_response(self) -> axum::response::Response {
+        (http::StatusCode::OK, axum::Json(&self)).into_response()
     }
 }

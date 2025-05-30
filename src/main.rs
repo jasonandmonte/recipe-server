@@ -1,3 +1,4 @@
+mod api;
 mod error;
 mod recipe;
 mod templates;
@@ -6,7 +7,6 @@ mod web;
 use error::*;
 use recipe::*;
 use templates::*;
-use web::*;
 
 extern crate fastrand;
 extern crate log;
@@ -14,7 +14,7 @@ extern crate mime;
 
 use axum::{
     self,
-    extract::{Query, State},
+    extract::{Path, Query, State, Json},
     http,
     response::{self, IntoResponse},
     routing,
@@ -104,10 +104,22 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
     let trace_layer = trace::TraceLayer::new_for_http()
         .make_span_with(trace::DefaultMakeSpan::new().level(tracing::Level::INFO))
         .on_response(trace::DefaultOnResponse::new().level(tracing::Level::INFO));
+
+    // API Routing
+    let apis = axum::Router::new()
+        .route("/recipe/{recipe_id}", routing::get(api::get_recipe_by_id))
+        .route("/recipe/by-tags", routing::get(api::get_recipe_by_tag))
+        .route("/recipe/random", routing::get(api::get_random_recipe));
+
+    let cors = tower_http::cors::CorsLayer::new()
+        .allow_methods([http::Method::GET])
+        .allow_origin(tower_http::cors::Any);
+
     let mime_favicon = "image/vnd.microsoft.icon".parse().unwrap();
 
+    // Website Routing
     let app = axum::Router::new()
-        .route("/", routing::get(get_recipe))
+        .route("/", routing::get(web::get_recipe))
         // NOTE: axum talks to tower-http
         .route_service(
             "/recipe.css",
@@ -117,6 +129,8 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
             "/favicon.ico",
             services::ServeFile::new_with_mime("assets/static/favicon.ico", &mime_favicon),
         )
+        .nest("/api/v1", apis)
+        .layer(cors)
         .layer(trace_layer)
         .with_state(state);
 
