@@ -30,7 +30,21 @@ cargo run -- --init-from assets/static/recipes.json
 ```
 
 
-`cargo run --release`: This will run the server on http://127.0.0.1:3000
+`cargo run --release`: This will run the server on `http://127.0.0.1:3000`
+
+## Testing
+
+Below is an entry in the JSON data and database for testing.
+```json
+{
+    "id": "test",
+    "title": "Test Recipe",
+    "ingredients": "1/2 an ingredient\n1 cup second ingredient",
+    "instructions": "Combine first ingredient and second ingredient.\nCook until ready to serve.",
+    "source": "test",
+    "tags": ["test"]
+}
+```
 
 ## Notes
 
