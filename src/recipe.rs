@@ -51,6 +51,37 @@ pub async fn get_random(db: &SqlitePool) -> Result<(Recipe, Vec<String>), sqlx::
     get(db, &id).await
 }
 
+/// Get random recipe from given tags
+pub async fn get_random_from_tags(db: &SqlitePool, tags: Vec<String>) -> Result<(Recipe, Vec<String>), sqlx::Error> 
+{
+    let mut tx = db.begin().await?;
+    sqlx::query("DROP TABLE IF EXISTS qtags;")
+        .execute(&mut *tx)
+        .await?;
+    sqlx::query("CREATE TEMPORARY TABLE qtags (tag VARCHR(200));")
+        .execute(&mut *tx)
+        .await?;
+    for tag in tags {
+        sqlx::query("INSERT INTO qtags VALUES ($1);")
+            .bind(tag)
+            .execute(&mut *tx)
+            .await?;
+    }
+
+    let row = sqlx::query("SELECT DISTINCT recipe_id FROM tags JOIN qtags ON tags.tag = qtags.tag ORDER BY RANDOM() LIMIT 1;")
+        .fetch_optional(&mut *tx)
+        .await?;
+
+    tx.commit().await?;
+
+    if let Some(row) = row {
+        let id: String = row.get("recipe_id");
+        get(db, &id).await
+    } else {
+        Err(sqlx::Error::RowNotFound)
+    }
+}
+
 impl JSONRecipe {
     pub fn new(recipe: Recipe, tags: Vec<String>) -> Self {
         let tags = tags.into_iter().collect();
