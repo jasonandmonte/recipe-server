@@ -61,7 +61,7 @@ pub async fn get_recipe(
             }
             Err(sqlx::Error::RowNotFound) => {
                 log::info!("tagged recipe selection was empty");
-                return Err(http::StatusCode::NOT_FOUND);
+                // Fallthrough to random joke
             }
             Err(e) => {
                 log::error!("tagged recipe selection database error: {}", e);
