@@ -52,8 +52,10 @@ pub async fn get_random(db: &SqlitePool) -> Result<(Recipe, Vec<String>), sqlx::
 }
 
 /// Get random recipe from given tags
-pub async fn get_random_from_tags(db: &SqlitePool, tags: Vec<String>) -> Result<(Recipe, Vec<String>), sqlx::Error> 
-{
+pub async fn get_random_from_tags(
+    db: &SqlitePool,
+    tags: Vec<String>,
+) -> Result<(Recipe, Vec<String>), sqlx::Error> {
     let mut tx = db.begin().await?;
     sqlx::query("DROP TABLE IF EXISTS qtags;")
         .execute(&mut *tx)

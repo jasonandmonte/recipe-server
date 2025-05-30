@@ -49,7 +49,7 @@ pub async fn get_recipe_by_id(
     )
 )]
 pub async fn get_random_recipe(
-        State(app_state): State<Arc<RwLock<AppState>>>,
+    State(app_state): State<Arc<RwLock<AppState>>>,
 ) -> Result<response::Response, http::StatusCode> {
     let app = app_state.write().await;
     let db = &app.db;
@@ -80,7 +80,7 @@ pub async fn get_recipe_by_tag(
     let app_reader = app_state.read().await;
     let db = &app_reader.db;
     let recipe_result = recipe::get_random_from_tags(db, tags).await;
-    
+
     match recipe_result {
         Ok((recipe, tags)) => Ok(JSONRecipe::new(recipe, tags).into_response()),
         Err(e) => {

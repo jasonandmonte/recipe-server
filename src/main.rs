@@ -14,7 +14,7 @@ extern crate mime;
 
 use axum::{
     self,
-    extract::{Path, Query, State, Json},
+    extract::{Json, Path, Query, State},
     http,
     response::{self, IntoResponse},
     routing,
@@ -121,8 +121,7 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
         .nest("/api/v1", api::router())
         .split_for_parts();
     // API Docs
-    let swagger_ui = SwaggerUi::new("/swagger-ui")
-        .url("/api-docs/openapi.json", api.clone());
+    let swagger_ui = SwaggerUi::new("/swagger-ui").url("/api-docs/openapi.json", api.clone());
     let redoc_ui = Redoc::with_url("/redoc", api);
     let rapidoc_ui = RapiDoc::new("/api-docs/openapi.json").path("/rapidoc");
 
