@@ -26,6 +26,11 @@ use std::sync::Arc;
 use tokio::{net, sync::RwLock};
 use tower_http::{services, trace};
 use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
+use utoipa::{OpenApi, ToSchema};
+use utoipa_axum::{router::OpenApiRouter, routes};
+use utoipa_rapidoc::RapiDoc;
+use utoipa_redoc::{Redoc, Servable};
+use utoipa_swagger_ui::SwaggerUi;
 
 #[derive(Parser)]
 struct Args {
@@ -105,17 +110,21 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
         .make_span_with(trace::DefaultMakeSpan::new().level(tracing::Level::INFO))
         .on_response(trace::DefaultOnResponse::new().level(tracing::Level::INFO));
 
-    // API Routing
-    let apis = axum::Router::new()
-        .route("/recipe/{recipe_id}", routing::get(api::get_recipe_by_id))
-        .route("/recipe/by-tags", routing::get(api::get_recipe_by_tag))
-        .route("/recipe/random", routing::get(api::get_random_recipe));
-
     let cors = tower_http::cors::CorsLayer::new()
         .allow_methods([http::Method::GET])
         .allow_origin(tower_http::cors::Any);
 
     let mime_favicon = "image/vnd.microsoft.icon".parse().unwrap();
+
+    // API Routing
+    let (api_router, api) = OpenApiRouter::with_openapi(api::ApiDoc::openapi())
+        .nest("/api/v1", api::router())
+        .split_for_parts();
+    // API Docs
+    let swagger_ui = SwaggerUi::new("/swagger-ui")
+        .url("/api-docs/openapi.json", api.clone());
+    let redoc_ui = Redoc::with_url("/redoc", api);
+    let rapidoc_ui = RapiDoc::new("/api-docs/openapi.json").path("/rapidoc");
 
     // Website Routing
     let app = axum::Router::new()
@@ -129,7 +138,10 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
             "/favicon.ico",
             services::ServeFile::new_with_mime("assets/static/favicon.ico", &mime_favicon),
         )
-        .nest("/api/v1", apis)
+        .merge(swagger_ui)
+        .merge(redoc_ui)
+        .merge(rapidoc_ui)
+        .merge(api_router)
         .layer(cors)
         .layer(trace_layer)
         .with_state(state);

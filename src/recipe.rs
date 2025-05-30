@@ -4,7 +4,7 @@ use crate::RecipeError;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashSet, ops::Deref, path::Path};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct JSONRecipe {
     pub id: String,
     pub title: String,
