@@ -6,6 +6,19 @@ pub struct GetRecipeParams {
     tags: Option<String>,
 }
 
+/// Handles the `/` route and returns a recipe based on query parameters.
+///
+/// This handler supports three query types:
+/// 1. If an `id` is provided as a query parameter, it fetches the recipe by that ID
+///    and renders the recipe page with associated tags.
+/// 2. If `tags` are provided as a comma-separated query parameter, it randomly selects
+///    a recipe that matches one or more of those tags and redirects to the recipe's page.
+/// 3. If neither `id` nor `tags` are provided, it randomly selects any recipe and redirects to its page.
+///
+/// # Query Examples
+/// - `/?id=example-id`: Fetch a specific recipe by ID.
+/// - `/?tags=beef`: Fetch a random recipe with one of the given tags.
+/// - `/`: Fallback to a random recipe.
 pub async fn get_recipe(
     State(app_state): State<Arc<RwLock<AppState>>>,
     Query(params): Query<GetRecipeParams>,

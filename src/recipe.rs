@@ -4,6 +4,7 @@ use crate::RecipeError;
 use serde::{Deserialize, Serialize};
 use std::{collections::HashSet, ops::Deref, path::Path};
 
+/// Represents a recipe as JSON object.
 #[derive(Debug, Serialize, Deserialize, ToSchema)]
 pub struct JSONRecipe {
     pub id: String,
@@ -11,9 +12,11 @@ pub struct JSONRecipe {
     pub ingredients: String,
     pub instructions: String,
     pub source: String,
+    /// Tags start attached from the .json file
     pub tags: HashSet<String>,
 }
 
+/// Represents recipe stored in the database.
 #[derive(Clone)]
 pub struct Recipe {
     pub id: String,
@@ -23,12 +26,14 @@ pub struct Recipe {
     pub recipe_source: String,
 }
 
+/// Reads JSON file and returns JSON recipes
 pub fn read_recipes<P: AsRef<Path>>(recipes_path: P) -> Result<Vec<JSONRecipe>, RecipeError> {
     let f = std::fs::File::open(recipes_path.as_ref())?;
     let recipes = serde_json::from_reader(f)?;
     Ok(recipes)
 }
 
+/// Query db for recipe and tags with given ID.
 pub async fn get(db: &SqlitePool, recipe_id: &str) -> Result<(Recipe, Vec<String>), sqlx::Error> {
     let recipe = sqlx::query_as!(Recipe, "SELECT * FROM recipes WHERE id = $1;", recipe_id)
         .fetch_one(db)
@@ -42,7 +47,7 @@ pub async fn get(db: &SqlitePool, recipe_id: &str) -> Result<(Recipe, Vec<String
     Ok((recipe, tags))
 }
 
-/// Get random ID and then call get() to get recipe & tags
+/// Get random ID and then call get() to get recipe & tags.
 pub async fn get_random(db: &SqlitePool) -> Result<(Recipe, Vec<String>), sqlx::Error> {
     let id = sqlx::query_scalar!("SELECT id FROM recipes ORDER BY RANDOM() LIMIT 1;")
         .fetch_one(db)
@@ -51,7 +56,7 @@ pub async fn get_random(db: &SqlitePool) -> Result<(Recipe, Vec<String>), sqlx::
     get(db, &id).await
 }
 
-/// Get random recipe from given tags
+/// Get random recipe from given tags.
 pub async fn get_random_from_tags(
     db: &SqlitePool,
     tags: Vec<String>,
@@ -97,6 +102,7 @@ impl JSONRecipe {
         }
     }
 
+    /// Convert from JSONRecipe to Recipe struct and tags iterator.
     pub fn to_recipe(&self) -> (Recipe, impl Iterator<Item = &str>) {
         let recipe = Recipe {
             id: self.id.clone(),
