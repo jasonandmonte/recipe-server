@@ -29,4 +29,29 @@
     "instructions": "Cook your pasta until al dente according to the directions on the package. Once done cooking, drain and add to a large bowl.\nAdd the tomatoes, cucumber, bell pepper, kalamata olives, green olives, pepperoncinis, red onion, feta, basil and parsley to the bowl with the pasta. Pour dressing over the top and toss together until combined.\nServe and enjoy!",
     "source": "https://www.ambitiouskitchen.com/herby-italian-orzo-salad/",
     "tags": ["salad", "vegetarian"]
+},
+{
+    "id": "the-best-sugar-cookie-recipe",
+    "title": "Sugar Cookies",
+    "ingredients": "3 cups all-purpose flour\n1 1/2 teaspoons baking powder\n1 teaspoon fine sea salt\n3 sticks unsalted butter\n1 1/2 cups granulated sugar\n2 large eggs\n1 tablespoon pure vanilla extract",
+    "instructions": "Preheat the oven to 375 degrees.\nMix the flour, baking powder, and salt in a medium bowl.\nPlace the softened butter and sugar in the bowl of your electric mixer. Cream the butter and sugar together on high until light and fluffy, 3-5 minutes.\nWith the mixer running on low, slowly add the flour mixture.\nPour some extra sugar into a bowl to coat the cookies. Scoop the dough out and roll into 1-inch balls.\nBake each sheet of sugar cookies for 9-11 minutes, until the edges are slightly golden and the centers are just barely set. Cool completely on the cookie sheets.",
+    "source": "https://www.aspicyperspective.com/the-best-sugar-cookie-recipe/",
+    "tags": ["dessert"]
+},
+{
+    "id": "crispy-tofu-pad-thai",
+    "title": "Crispy Tofu Pad Thai",
+    "ingredients": "6 ounces firm or extra-firm tofu\n5 ounces dried rice noodles\n2 tablespoons fish sauce\n2 tablespoons tamarind concentrate\n2 to 4 teaspoons dark brown sugar\nA pinch or two Thai or other chile flakes\n1 small shallot, chopped\n2 garlic cloves\n2 tablespoons sweet preserved radish, grated or minced\n1 cup bean sprouts\n1 large egg\n4 garlic chives",
+    "instructions": "Prepare tofu: Drain the tofu, and place it on a few paper towels; place a few more towels over it.\nPrepare noodles: Meanwhile, place noodles in a large bowl; pour hot water over to cover.\nPrepare the sauce: Stir together fish sauce, tamarind, brown sugar, and chili powder.\nCrisp the tofu: Heat a large frying pan or a wok over high for a full minute, then add a tablespoon or two of oil and let this heat for a full minute too, and then add tofu cubes. Reduce heat to medium-high. Cook them until browned underneath, then use a thin spatula to turn them and cook some more, until all sides are golden and crisp.\nCook the pad thai: Add another generous glug oil to the hot pan and, once very hot, cook garlic, shallots, and radishes for a minute, until they take on a little edge of color.Add noodles and sauce and cook until noodles absorb sauce.\nTo finish: Around the rim, leave extra garnishes in a little piles. Squeeze lime juice over before eating.",
+    "source": "https://smittenkitchen.com/2018/04/crispy-tofu-pad-thai/",
+    "tags": ["thai", "tofu"]
+},
+{
+
+    "id": "test",
+    "title": "Test Recipe",
+    "ingredients": "1/2 an ingredient\n1 cup second ingredient",
+    "instructions": "Combine first ingredient and second ingredient.\nCook until ready to serve.",
+    "source": "test",
+    "tags": ["test"]
 }]
