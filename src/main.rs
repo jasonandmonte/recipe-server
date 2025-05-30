@@ -43,6 +43,12 @@ struct AppState {
     current_recipe: Recipe,
 }
 
+// 404 Route handler
+async fn handler_404(uri: http::Uri) -> axum::response::Response {
+    log::error!("404 No route for {uri}");
+    (http::StatusCode::NOT_FOUND, "404 Not Found").into_response()
+}
+
 async fn serve() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
     let db = SqlitePool::connect("sqlite://db/recipes.db").await?;
@@ -141,6 +147,7 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
         .merge(redoc_ui)
         .merge(rapidoc_ui)
         .merge(api_router)
+        .fallback(handler_404)
         .layer(cors)
         .layer(trace_layer)
         .with_state(state);
