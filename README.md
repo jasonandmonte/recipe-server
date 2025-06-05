@@ -1,7 +1,7 @@
 # Recipe Server
 Author: Jason Gonzales
 
-## Overview
+## Overview (What I did)
 
 This project implements a web server that serves randomly selected recipes. Currently on startup recipes are read from a JSON file (`assets/static/recipes.json`) into memory. When a user accesses the home page or refreshes a random recipe is displayed.
 
@@ -29,8 +29,13 @@ First run to add recipes from `.json` file:
 cargo run -- --init-from assets/static/recipes.json
 ```
 
-
 `cargo run --release`: This will run the server on `http://127.0.0.1:3000`
+
+## REST API Documentation Paths
+
+- `/swagger-ui`: Swagger UI Documentation Layout
+- `/redoc`: Redocly Documentation Layout
+- `/rapidoc`: RapiDoc Documentation Layout  
 
 ## Testing
 
