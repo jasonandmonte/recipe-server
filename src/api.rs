@@ -14,7 +14,36 @@ pub fn router() -> OpenApiRouter<Arc<RwLock<AppState>>> {
         .routes(routes!(get_random_recipe))
         .routes(routes!(get_recipe_by_tag))
         .routes(routes!(register))
+        .routes(routes!(add_recipe))
 }
+
+
+
+#[utoipa::path(
+    post,
+    path = "/add-recipe",
+    request_body(
+        content = inline(JSONRecipe),
+        description = "Add a recipe"
+    ),
+    responses(
+        (status = 201, description = "Recipe was added", body = ()),
+        (status = 400, description = "Bad request", body = String),
+        (status = 401, description = "Auth error", body = authjwt::AuthError),
+    )
+)]
+pub async fn add_recipe(
+    _claims: authjwt::Claims,
+    State(app_state): State<SharedAppState>,
+    Json(recipe): Json<JSONRecipe>,
+) -> axum::response::Response {
+    let app_state = app_state.read().await;
+    match recipe::add(&app_state.db, recipe).await {
+        Err(e) => (StatusCode::BAD_REQUEST, e.to_string()).into_response(),
+        Ok(()) => StatusCode::CREATED.into_response(),
+    }
+}
+
 
 #[utoipa::path(
     get,

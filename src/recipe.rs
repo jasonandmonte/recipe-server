@@ -89,6 +89,37 @@ pub async fn get_random_from_tags(
     }
 }
 
+/// Add recipe to recipes table and tags table in database.
+pub async fn add(db: &SqlitePool, recipe: JSONRecipe) -> Result<(), sqlx::Error> {
+    let mut jtx = db.begin().await?;
+
+    sqlx::query!(
+        r#"INSERT INTO recipes
+        (id, title, ingredients, instructions, recipe_source)
+        VALUES ($1, $2, $3, $4, $5);"#,
+        recipe.id,
+        recipe.title,
+        recipe.ingredients,
+        recipe.instructions,
+        recipe.source,
+    )
+    .execute(&mut *jtx)
+    .await?;
+
+    for tag in recipe.tags {
+        sqlx::query!(
+            r#"INSERT INTO tags (recipe_id, tag) VALUES ($1, $2);"#,
+            recipe.id,
+            tag,
+        )
+            .execute(&mut *jtx)
+            .await?;
+    }
+
+    jtx.commit().await?;
+    Ok(())
+}
+
 impl JSONRecipe {
     pub fn new(recipe: Recipe, tags: Vec<String>) -> Self {
         let tags = tags.into_iter().collect();
