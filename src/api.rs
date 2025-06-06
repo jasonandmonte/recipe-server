@@ -13,6 +13,7 @@ pub fn router() -> OpenApiRouter<Arc<RwLock<AppState>>> {
         .routes(routes!(get_recipe_by_id))
         .routes(routes!(get_random_recipe))
         .routes(routes!(get_recipe_by_tag))
+        .routes(routes!(register))
 }
 
 #[utoipa::path(
@@ -87,5 +88,28 @@ pub async fn get_recipe_by_tag(
             log::warn!("api:get_recipe_by_tag failed: {}", e);
             Err(http::StatusCode::NOT_FOUND)
         }
+    }
+}
+
+#[utoipa::path(
+    post,
+    path = "/register",
+    request_body(
+        content = inline(authjwt::Registration),
+        description = "Get an API key",
+    ),
+    responses(
+        (status = 200, description = "JSON Web Token", body = authjwt::AuthBody),
+        (status = 401, description = "Registration failed", body = authjwt::AuthError),
+    )
+)]
+pub async fn register(
+    State(app_state): State<SharedAppState>,
+    Json(registration): Json<authjwt::Registration>,
+) -> axum::response::Response {
+    let app_state = app_state.read().await;
+    match authjwt::make_jwt_token(&app_state, &registration) {
+        Err(e) => e.into_response(),
+        Ok(token) => (StatusCode::OK, token).into_response(),
     }
 }
