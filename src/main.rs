@@ -1,4 +1,5 @@
 mod api;
+mod authjwt;
 mod error;
 mod recipe;
 mod templates;
@@ -14,13 +15,20 @@ extern crate mime;
 
 use axum::{
     self,
+    RequestPartsExt,
     extract::{Json, Path, Query, State},
-    http,
+    http::{self, StatusCode},
     response::{self, IntoResponse},
     routing,
 };
+use axum_extra::{
+    headers::{authorization::Bearer, Authorization},
+    TypedHeader,
+};
+use chrono::{prelude::*, TimeDelta};
 use clap::Parser;
-use serde::Deserialize;
+use jsonwebtoken::{EncodingKey, DecodingKey};
+use serde::{Serialize, Deserialize};
 use sqlx::{Row, SqlitePool};
 use std::sync::Arc;
 use tokio::{net, sync::RwLock};
@@ -40,8 +48,31 @@ struct Args {
 
 struct AppState {
     db: SqlitePool,
+    jwt_keys: authjwt::JwtKeys,
+    reg_key: String,
     current_recipe: Recipe,
 }
+
+type SharedAppState = Arc<RwLock<AppState>>;
+
+impl AppState {
+    pub fn new(db: SqlitePool, jwt_keys: authjwt::JwtKeys, reg_key: String) -> Self {
+        let current_recipe = Recipe {
+            id: "boil".to_string(),
+            title: "Boil Water".to_string(),
+            ingredients: "100 ml water".to_string(),
+            instructions: "Add water to pot.\nHeat pot until water boils.".to_string(),
+            recipe_source: "Jason Gonzales".to_string(),
+        };
+        Self {
+            db,
+            jwt_keys,
+            reg_key,
+            current_recipe,
+        }
+    }
+}
+
 
 // 404 Route handler
 async fn handler_404(uri: http::Uri) -> axum::response::Response {
@@ -92,15 +123,21 @@ async fn serve() -> Result<(), Box<dyn std::error::Error>> {
         }
         return Ok(());
     }
+    
+    // Keys
+    let jwt_keys = authjwt::make_jwt_keys().await.unwrap_or_else(|_| {
+        tracing::error!("make jwt keys");
+        std::process::exit(1);
+    });
 
-    let current_recipe = Recipe {
-        id: "boil".to_string(),
-        title: "Boil Water".to_string(),
-        ingredients: "100 ml water".to_string(),
-        instructions: "Add water to pot.\nHeat pot until water boils.".to_string(),
-        recipe_source: "Jason Gonzales".to_string(),
-    };
-    let app_state = AppState { db, current_recipe };
+    let reg_key = authjwt::read_secret("REG_CODE", "secrets/reg_code.txt")
+        .await
+        .unwrap_or_else(|_| {
+            tracing::error!("read secret: reg code");
+            std::process::exit(1);
+        });
+
+    let app_state = AppState::new(db, jwt_keys, reg_key);
     let state = Arc::new(RwLock::new(app_state));
 
     // RUST_LOG is the default env variable

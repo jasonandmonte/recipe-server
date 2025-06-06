@@ -37,9 +37,23 @@ cargo run -- --init-from assets/static/recipes.json
 - `/redoc`: Redocly Documentation Layout
 - `/rapidoc`: RapiDoc Documentation Layout  
 
+## REST API Registration
+
+Using a POST request to `/api/v1/register` provide your name and email with
+the access code: `openinvite`. Currently the access code acts as an invite code
+for the server to allow a user to perform authorized actions with the REST API.
+
+```json
+{
+    "full_name": "First Last",
+    "email": "firstlast@example.com",
+    "access_code": "openinvite"
+}
+```
+
 ## Testing
 
-Below is an entry in the JSON data and database for testing.
+Below is an entry in the JSON data and database for query testing.
 ```json
 {
     "id": "test",
