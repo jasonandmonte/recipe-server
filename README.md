@@ -51,6 +51,23 @@ for the server to allow a user to perform authorized actions with the REST API.
 }
 ```
 
+## Docker
+
+Make sure SQL queries are precompiled
+```sh
+cargo sqlx prepare
+```
+
+From the project root (same directory as `Dockerfile`) build the docker image:
+```sh
+docker build -t recipe-server .
+```
+
+Expose port 3000 to access the server
+```sh
+docker run -p 3000:3000 recipe-server
+```
+
 ## Testing
 
 Below is an entry in the JSON data and database for query testing.
