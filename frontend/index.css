@@ -1,0 +1,28 @@
+
+body {
+    padding-left: 1em;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 150%;
+}
+
+button {
+    margin: 2em 0em 2em 0em;
+}
+
+.recipe {
+    padding: 0em 2em 0 2em;
+    margin: 1em 0.5em 2em 0;
+    border: 2px solid #121212;
+    border-radius: 4px;
+    box-shadow: 10px 10px #000;
+    position: relative;
+    overflow: hidden;
+    transition: 0.5s ease;
+}
+
+.error {
+    color: #881111;
+}

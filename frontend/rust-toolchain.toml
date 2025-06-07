@@ -1,0 +1,5 @@
+# Nightly expected
+# https://github.com/leptos-rs/leptos?tab=readme-ov-file#nightly-note
+[toolchain]
+channel = "nightly"
+targets = ["wasm32-unknown-unknown"]
