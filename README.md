@@ -68,6 +68,23 @@ Expose port 3000 to access the server
 docker run -p 3000:3000 recipe-server
 ```
 
+## Frontend
+
+The `frontend/` directory contains a dynamic Leptos web frontend that consumes the backend REST API 
+that runs from the outer project on `http://127.0.0.1:3000/api/v1/`.
+
+```sh
+cd frontend/
+trunk serve --open
+```
+This will run the frontend on `http://127.0.0.1:8080`
+
+To build the frontend for deployment:
+```sh
+trunk build --release
+```
+This will output static assets to `dist/`.
+
 ## Testing
 
 Below is an entry in the JSON data and database for query testing.
