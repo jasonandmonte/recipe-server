@@ -24,3 +24,6 @@ target/
 # Environment
 .env
 /secrets/
+
+# Frontend
+/frontend/dist/
